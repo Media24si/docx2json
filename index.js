@@ -21,7 +21,7 @@ mammoth.convertToHtml({path: argv.file}, mammothOptions)
       let messages = result.messages
 
       if (messages.length > 0) {
-        throw new Error(messages)
+        throw new Error(JSON.stringify(messages))
       }
 
       callPuppeteer(htmlFromFile)
