@@ -2,6 +2,8 @@
 
 Using Puppeteer / Mammothjs / Editorjs
 
+Available on [DockerHub](https://hub.docker.com/repository/docker/media24si/docx2json/general).
+
 Install dependencies with:
 
 ```
