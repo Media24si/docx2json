@@ -6,12 +6,22 @@ const argv = require('yargs/yargs')(process.argv.slice(2))
     .default('output', 'pipe') // Output can be pipe or json
     .argv;
 const puppeteer = require('puppeteer')
+const filesystem = require('fs')
 const fs = require('fs/promises')
 
 var mammothOptions = {
   styleMap: [
     "b => b",
-    "i => i"
+    "i => i",
+    "p[style-name='Text Body'] => p:fresh",
+    "p[style-name='Body Text'] => p:fresh",
+    "p[style-name='No Spacing'] => p:fresh",
+    "p[style-name='Emphasis'] => p:fresh",
+    "p[style-name='StrongEmphasis'] => p:fresh",
+    "p[style-name='Strong Emphasis'] => p:fresh",
+    "p[style-name='Caption'] => p:fresh",
+    "p[style-name='Markedcontent'] => p:fresh",
+    "p[style-name='Rynqvb'] => p:fresh",
   ]
 };
 
@@ -23,6 +33,17 @@ mammoth.convertToHtml({path: argv.file}, mammothOptions)
       if (messages.length > 0) {
         throw new Error(JSON.stringify(messages))
       }
+
+      // Add additional paragraph to the end of the file
+      htmlFromFile += '<p>_</p>'
+
+      // Get filename from argv and remove extension
+      const filename = argv.file.split('.')[0]
+      // Slugify the filename and add .json extension
+      const slugifiedFilename = filename.replace(/\s+/g, '-').toLowerCase() + '.html'
+      filesystem.writeFile(`/usr/src/app/${slugifiedFilename}`, htmlFromFile, function (err) {
+        if (err) throw err;
+      });
 
       callPuppeteer(htmlFromFile)
   })
@@ -41,10 +62,10 @@ function callPuppeteer(htmlFromFile) {
           args: [
               '--no-sandbox',
               '--headless',
-              // '--disable-gpu',
-              // '--disable-dev-shm-usage',
-              // '--remote-debugging-port=9222',
-              // '--remote-debugging-address=0.0.0.0',
+              '--disable-gpu',
+              '--disable-dev-shm-usage',
+              '--remote-debugging-port=9222',
+              '--remote-debugging-address=0.0.0.0',
           ],
       });
 

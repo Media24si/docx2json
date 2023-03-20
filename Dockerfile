@@ -20,7 +20,7 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
 COPY . /usr/src/app
 WORKDIR /usr/src/app
 
-RUN mkdir /usr/src/app/input
+RUN mkdir -p /usr/src/app/input
 
 # RUN npm install mammoth yargs puppeteer
 # fs
