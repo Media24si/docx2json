@@ -30,10 +30,6 @@ mammoth.convertToHtml({path: argv.file}, mammothOptions)
       let htmlFromFile = result.value
       let messages = result.messages
 
-      if (messages.length > 0) {
-        throw new Error(JSON.stringify(messages))
-      }
-
       // Add additional paragraph to the end of the file
       htmlFromFile += '<p>_</p>'
 
@@ -46,6 +42,10 @@ mammoth.convertToHtml({path: argv.file}, mammothOptions)
       });
 
       callPuppeteer(htmlFromFile)
+
+      if (messages.length > 0) {
+        throw new Error(JSON.stringify(messages))
+      }
   })
   .catch(function(error) {
       console.error(error);
